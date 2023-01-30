@@ -75,45 +75,52 @@ func (f *Formatter) Format(entry *logrus.Entry) ([]byte, error) {
 func convertLevelToText(level logrus.Level, useColor bool) string {
 	switch level {
 	case logrus.TraceLevel:
-		return color("TRACE", useColor)
+		l := "TRACE"
+		if useColor {
+			return color(l, Purple)
+		}
+		return l
 	case logrus.DebugLevel:
-		return color("DEBUG", useColor)
+		l := "DEBUG"
+		if useColor {
+			return color(l, Blue)
+		}
+		return l
 	case logrus.InfoLevel:
-		return color("INFO ", useColor)
+		l := "INFO "
+		if useColor {
+			return color(l, Green)
+		}
+		return l
 	case logrus.WarnLevel:
-		return color("WARN ", useColor)
+		l := "WARN "
+		if useColor {
+			return color(l, Yellow)
+		}
+		return l
 	case logrus.ErrorLevel:
-		return color("ERROR", useColor)
+		l := "ERROR"
+		if useColor {
+			return color(l, Red)
+		}
+		return l
 	case logrus.FatalLevel:
-		return color("FATAL", useColor)
+		l := "FATAL"
+		if useColor {
+			return color(l, Red)
+		}
+		return l
 	case logrus.PanicLevel:
-		return color("PANIC", useColor)
+		l := "PANIC"
+		if useColor {
+			return color(l, Red)
+		}
+		return l
 	}
 
 	return "-----"
 }
 
-func color(level string, useColor bool) string {
-	if !useColor {
-		return level
-	}
-
-	switch level {
-	case "TRACE":
-		return Purple + level + Reset
-	case "DEBUG":
-		return Blue + level + Reset
-	case "INFO ":
-		return Green + level + Reset
-	case "WARN ":
-		return Yellow + level + Reset
-	case "ERROR":
-		return Red + level + Reset
-	case "FATAL":
-		return Red + level + Reset
-	case "PANIC":
-		return Red + level + Reset
-	}
-
-	return "-----"
+func color(level string, c string) string {
+	return c + level + Reset
 }
