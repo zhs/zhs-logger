@@ -7,6 +7,10 @@ import (
 	"time"
 )
 
+const (
+	format = "2006-01-02 15:04:05"
+)
+
 func TestNew(t *testing.T) {
 	l := New()
 	f := Formatter{}
@@ -17,7 +21,7 @@ func TestNew(t *testing.T) {
 	e.Time = time.Now()
 	b, _ := f.Format(e)
 
-	expected := strings.Join([]string{e.Time.Format(time.RFC3339), "[WARN ]:", "Test Message\n"}, " ")
+	expected := strings.Join([]string{e.Time.Format(format), "[WARN ]:", "Test Message\n"}, " ")
 	if string(b) != expected {
 		t.Errorf("formatting expected result was %q instead of %q", string(b), expected)
 	}
@@ -33,7 +37,7 @@ func TestFormatterDefaultFormat(t *testing.T) {
 
 	b, _ := f.Format(e)
 
-	expected := strings.Join([]string{e.Time.Format(time.RFC3339), "[WARN ]:", "Test Message\n"}, " ")
+	expected := strings.Join([]string{e.Time.Format(format), "[WARN ]:", "Test Message\n"}, " ")
 	if string(b) != expected {
 		t.Errorf("formatting expected result was %q instead of %q", string(b), expected)
 	}

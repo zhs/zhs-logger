@@ -1,18 +1,16 @@
 package logger
 
 import (
+	"github.com/sirupsen/logrus"
 	"os"
 	"strconv"
 	"strings"
-	"time"
-
-	"github.com/sirupsen/logrus"
 )
 
 const (
 	// Default log format will output [INFO]: 2006-01-02T15:04:05Z07:00 - Log message
 	defaultLogFormat       = "%time% [%lvl%]: %msg%\n"
-	defaultTimestampFormat = time.RFC3339
+	defaultTimestampFormat = "2006-01-02 15:04:05"
 )
 
 // New returns Logrus with default formatter
