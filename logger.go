@@ -7,27 +7,28 @@ import (
 	"strings"
 )
 
-var Reset = "\033[0m"
-var Red = "\033[31m"
-var Green = "\033[32m"
-var Yellow = "\033[33m"
-var Blue = "\033[34m"
-var Purple = "\033[35m"
-
 const (
-	// Default log format will output [INFO]: 2006-01-02T15:04:05Z07:00 - Log message
-	defaultLogFormat       = "%time% [%lvl%]: %msg%\n"
+	defaultLogFormat       = "[%time%] %lvl% %msg%\n"
 	defaultTimestampFormat = "2006-01-02 15:04:05"
+	Reset                  = "\033[0m"
+	Red                    = "\033[31m"
+	Green                  = "\033[32m"
+	Yellow                 = "\033[33m"
+	Blue                   = "\033[34m"
+	Purple                 = "\033[35m"
 )
 
-// New returns Logrus with default formatter
-func New() *logrus.Logger {
-	return &logrus.Logger{
-		Out:   os.Stderr,
-		Level: logrus.DebugLevel,
-		Formatter: &Formatter{
+// New returns Logrus with default formatter (use nil for default formatter)
+func New(formatter *Formatter) *logrus.Logger {
+	if formatter == nil {
+		formatter = &Formatter{
 			UseColor: true,
-		},
+		}
+	}
+	return &logrus.Logger{
+		Out:       os.Stderr,
+		Level:     logrus.DebugLevel,
+		Formatter: formatter,
 	}
 }
 
@@ -51,9 +52,7 @@ func (f *Formatter) Format(entry *logrus.Entry) ([]byte, error) {
 	}
 
 	output = strings.Replace(output, "%time%", entry.Time.Format(timestampFormat), 1)
-
 	output = strings.Replace(output, "%msg%", entry.Message, 1)
-
 	output = strings.Replace(output, "%lvl%", convertLevelToText(entry.Level, f.UseColor), 1)
 
 	for k, val := range entry.Data {
@@ -87,13 +86,13 @@ func convertLevelToText(level logrus.Level, useColor bool) string {
 		}
 		return l
 	case logrus.InfoLevel:
-		l := "INFO "
+		l := " INFO"
 		if useColor {
 			return color(l, Green)
 		}
 		return l
 	case logrus.WarnLevel:
-		l := "WARN "
+		l := " WARN"
 		if useColor {
 			return color(l, Yellow)
 		}

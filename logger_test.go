@@ -1,8 +1,8 @@
 package logger
 
 import (
+	"fmt"
 	"github.com/sirupsen/logrus"
-	"strings"
 	"testing"
 	"time"
 )
@@ -12,7 +12,7 @@ const (
 )
 
 func TestNew(t *testing.T) {
-	l := New()
+	l := New(nil)
 	f := Formatter{}
 
 	e := l.WithField("", "")
@@ -21,7 +21,7 @@ func TestNew(t *testing.T) {
 	e.Time = time.Now()
 	b, _ := f.Format(e)
 
-	expected := strings.Join([]string{e.Time.Format(format), "[WARN ]:", "Test Message\n"}, " ")
+	expected := fmt.Sprintf("[%s]  WARN Test Message\n", e.Time.Format(format))
 	if string(b) != expected {
 		t.Errorf("formatting expected result was %q instead of %q", string(b), expected)
 	}
@@ -37,7 +37,7 @@ func TestFormatterDefaultFormat(t *testing.T) {
 
 	b, _ := f.Format(e)
 
-	expected := strings.Join([]string{e.Time.Format(format), "[WARN ]:", "Test Message\n"}, " ")
+	expected := fmt.Sprintf("[%s]  WARN Test Message\n", e.Time.Format(format))
 	if string(b) != expected {
 		t.Errorf("formatting expected result was %q instead of %q", string(b), expected)
 	}
